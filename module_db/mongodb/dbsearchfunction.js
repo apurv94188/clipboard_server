@@ -4,8 +4,6 @@ const CC = require('../../classes/clip-class.js')
 const cf = require('../../common_func.js');
 const CONNECTION = require('./dbconnect.js');
 
-const db_name = "dbClipper";
-
 function getClipClassObj(find_output) {
     cf.log_msg('reformatClipData::');
     let clipObj = new CC.CClip(find_output.name);
@@ -14,10 +12,10 @@ function getClipClassObj(find_output) {
 }
 
 function searchByName(req, res) {
-    cf.log_msg('searchByName');
+    cf.log_msg('DEBUG', 'Mongodb', 'searchByName');
     cf.log_msg(req.search_clip_obj.name);
     let search_clipname = req.search_clip_obj.name;
-    const db_conn = CONNECTION.fn_get_db_conn(db_name);
+    const db_conn = CONNECTION.fn_get_db_conn(process.env.DB_NAME);
     return new Promise ((resolve, reject) => {
         DBModel.Clips.find({name: new RegExp(search_clipname)})
         .then( result => {

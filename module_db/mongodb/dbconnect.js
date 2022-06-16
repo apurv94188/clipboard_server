@@ -4,7 +4,7 @@ const cf = require('../../common_func.js')
 
 function get_db_connection (db_name) {
 
-    const db_url = "mongodb://127.0.0.1/" + db_name;
+    const db_url = process.env.DB_URL + '/' + db_name;
     mongoose.connect(
         db_url, 
         {

@@ -3,12 +3,13 @@
 
 const db = require('./mongodb/dbaddfunction.js');
 const cf = require('../common_func.js');
+const CClip = require('../classes/clip-class.js');
 
-function add_clip_to_db (req, res, next) {
+function addClipToDatabase (req, res, next) {
     cf.log_msg('db:: add_clip_to_db');
-    cf.log_msg(req.clip_obj.name)
-
-    db.add_clip(req, res)
+    let oClip = req.oClip;
+    
+    db.addClip(oClip)
     .then( result => {
         req.db_status = 1;
         cf.log_msg('db:: Clip saved successfully');
@@ -24,4 +25,4 @@ function add_clip_to_db (req, res, next) {
     
 }
 
-module.exports.add_clip_to_db = add_clip_to_db;
+module.exports.addClipToDB = addClipToDatabase;

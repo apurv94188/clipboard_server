@@ -2,9 +2,7 @@
 // const router = express.Router();
 const CC = require('../classes/clip-class.js')
 
-const DATABASE = 'mongodb';
-
-const DBSearch = require('./'+DATABASE+'/dbsearchfunction.js');
+const DBSearch = require('./mongodb/dbsearchfunction.js');
 const cf = require('../common_func.js');
 
 function searchClipByName (req,res,next) {

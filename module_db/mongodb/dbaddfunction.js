@@ -2,40 +2,51 @@ const Model = require('./dbmodel.js');
 const Connection = require('./dbconnect.js');
 const db_name = "dbClipper";
 const cf = require('../../common_func.js');
+const class_clip = require('../../classes/clip-class.js');
+const CClip = class_clip.CClip;
 
-function add_clip (req, res) {
+function convertJsonToClipObj (clip_json_data) {
+    let oClip = new CClip();
+    oClip.m_sName = clip_json_data.name;
+    oClip.m_sDescription = clip_json_data.data;
+    return oClip;
+}
+
+function addNewClipToClipsDB (oClip) {
     cf.log_msg('mongodb:: add_clip');
     return new Promise ((resolve, reject) => {
-        let new_clip_data = req.clip_obj;
-        cf.log_msg(req.clip_obj.name)
+        
+        cf.log_msg(oClip.m_sName)
         const db_conn = Connection.fn_get_db_conn(db_name);
         let new_clip = new Model.Clips({
-            name: new_clip_data.name,
-            data: new_clip_data.data
+            name: oClip.m_sName,
+            data: oClip.m_sDescription
         });
     
         new_clip.save()
         .then( result => {
-            cf.log_msg('mongodb:: New Clip ' + new_clip.name + ' saved successfully');
-            req.saved_clip = {
-                name: new_clip.name,
-                data: new_clip.data
-            };
+            cf.log_msg('mongodb:: New Clip ' + result.m_sName + ' saved successfully');
+            let oClip = convertJsonToClipObj(result);
+            let response = {
+                db_status: 1,
+                oClip: oClip
+            }
             //next();
-            resolve(req.saved_clip)
+            resolve(response)
             return
         })
         .catch( error => {
             cf.log_msg('mongodb:: Failed to add new clip ' + new_clip.name + ' to the db');
-            req.error = {
+            response = {
+                db_status: 0,
                 msg: error
             };
             //next();
-            reject(req.error);
+            reject(response);
             return
         });
     })
 }
 
 
-module.exports.add_clip = add_clip;
+module.exports.addClip = addNewClipToClipsDB;

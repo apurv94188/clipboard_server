@@ -14,7 +14,19 @@ function get_time_stamp_now() {
 }
 
 function log_msg(msg) {
-    console.log(get_time_stamp_now() + ' || ' + msg);
+    switch (arguments.length){
+        case 1:
+            console.log(get_time_stamp_now() + ' || ' + msg);
+            break;
+        case 2:
+            console.log(get_time_stamp_now() + arguments[0] + ' || ' + arguments[1]);
+            break;
+        case 3:
+            console.log(get_time_stamp_now() + ' ' + arguments[0] + ' ' + arguments[1] + ' || ' + arguments[2]);
+            break;
+    }
+    
 }
+
 
 module.exports.log_msg = log_msg;
